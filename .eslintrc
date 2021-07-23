@@ -3,6 +3,9 @@
   "rules": {
     "no-console": "off",
     "semi": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "import/no-dynamic-require": "off",
+    "global-require": "off",
+    "arrow-parens": "off"
   }
 }
