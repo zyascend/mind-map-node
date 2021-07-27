@@ -8,6 +8,11 @@ const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const path = require('path')
 
+const config = require('./configs')
+const connectDb = require('./dbs/init')
+
+connectDb(config.dbUrl)
+
 const routes = require('./routes')
 
 // error handler

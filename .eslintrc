@@ -6,6 +6,7 @@
     "comma-dangle": "off",
     "import/no-dynamic-require": "off",
     "global-require": "off",
-    "arrow-parens": "off"
+    "arrow-parens": "off",
+    "class-methods-use-this": "off"
   }
 }
