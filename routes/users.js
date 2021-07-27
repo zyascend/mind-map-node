@@ -5,6 +5,6 @@ router.prefix('/users')
 
 router.post('/login', user.login)
 
-router.get('/register', user.login)
+router.post('/register', user.register)
 
 module.exports = router

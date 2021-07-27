@@ -7,6 +7,7 @@
     "import/no-dynamic-require": "off",
     "global-require": "off",
     "arrow-parens": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "arrow-body-style":  "off"
   }
 }
