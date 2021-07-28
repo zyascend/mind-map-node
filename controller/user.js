@@ -8,12 +8,19 @@ class User {
       email: { type: 'string', required: true },
       pwd: { type: 'string', required: true }
     })
+    const user = await UserModel.findOne(ctx.request.body)
+    if (!user) {
+      ctx.body = errorResponse('用户名或密码错误')
+      // ctx.throw(404, '用户名或密码错误')
+      return
+    }
     ctx.body = {
       code: 0,
+      token: 'fake token'
     }
   }
 
-  async register(ctx, next) {
+  async register(ctx) {
     ctx.verifyParams({
       email: { type: 'string', required: true },
       pwd: { type: 'string', required: true }
