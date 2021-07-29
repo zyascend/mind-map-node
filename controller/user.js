@@ -1,4 +1,6 @@
+const jsonwebtoken = require('jsonwebtoken')
 const UserModel = require('../dbs/schema/user')
+const { tokenSecret } = require('../configs')
 const { errorResponse } = require('./utils')
 
 class User {
@@ -14,9 +16,11 @@ class User {
       // ctx.throw(404, '用户名或密码错误')
       return
     }
+    const { _id, email } = user
+    const token = jsonwebtoken.sign({ _id, email }, tokenSecret, { expiresIn: '1h' })
     ctx.body = {
       code: 0,
-      token: 'fake token'
+      token
     }
   }
 
@@ -29,16 +33,13 @@ class User {
     const { email } = ctx.request.body
     const existedUser = await UserModel.findOne({ email })
     if (existedUser) {
-      ctx.body = {
-        code: -1,
-        msg: '用户已注册'
-      }
+      ctx.body = errorResponse('该用户已注册')
       return
     }
-    const newUser = await new UserModel(ctx.request.body).save()
+    await new UserModel(ctx.request.body).save()
     ctx.body = {
       code: 0,
-      newUser
+      msg: '注册成功'
     }
   }
 }
