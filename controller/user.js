@@ -11,16 +11,17 @@ class User {
       pwd: { type: 'string', required: true }
     })
     const user = await UserModel.findOne(ctx.request.body)
+    console.log(user)
     if (!user) {
       ctx.body = errorResponse('用户名或密码错误')
       // ctx.throw(404, '用户名或密码错误')
       return
     }
-    const { _id, email } = user
+    const { _id, email, _doc } = user
     const token = jsonwebtoken.sign({ _id, email }, tokenSecret, { expiresIn: '1h' })
     ctx.body = {
       code: 0,
-      token
+      user: { ..._doc, token }
     }
   }
 
@@ -41,6 +42,12 @@ class User {
       code: 0,
       msg: '注册成功'
     }
+  }
+
+  async editProfile(ctx) {
+    ctx.verifyParams({
+      _id: { type: 'string', required: true },
+    })
   }
 }
 module.exports = new User()
