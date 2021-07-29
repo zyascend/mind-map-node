@@ -4,3 +4,10 @@ exports.errorResponse = msg => {
     msg
   }
 }
+
+exports.successResponse = (res = {}) => {
+  return {
+    code: 0,
+    res
+  }
+}

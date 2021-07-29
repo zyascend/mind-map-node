@@ -5,7 +5,7 @@ const { resolve } = require('path')
 
 module.exports = db => {
   let maxConnectTimes = 0
-
+  mongoose.set('useFindAndModify', false)
   if (process.env.NODE_ENV !== 'production') {
     mongoose.set('debug', true)
   }

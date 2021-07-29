@@ -1,7 +1,7 @@
 const jsonwebtoken = require('jsonwebtoken')
 const UserModel = require('../dbs/schema/user')
 const { tokenSecret } = require('../configs')
-const { errorResponse } = require('./utils')
+const { errorResponse, successResponse } = require('./utils')
 
 class User {
   async login(ctx) {
@@ -17,12 +17,9 @@ class User {
       // ctx.throw(404, '用户名或密码错误')
       return
     }
-    const { _id, email, _doc } = user
-    const token = jsonwebtoken.sign({ _id, email }, tokenSecret, { expiresIn: '1h' })
-    ctx.body = {
-      code: 0,
-      user: { ..._doc, token }
-    }
+    const { _id, _doc } = user
+    const token = jsonwebtoken.sign({ id: _id }, tokenSecret, { expiresIn: '1h' })
+    ctx.body = successResponse({ ..._doc, token })
   }
 
   async register(ctx) {
@@ -38,16 +35,23 @@ class User {
       return
     }
     await new UserModel(ctx.request.body).save()
-    ctx.body = {
-      code: 0,
-      msg: '注册成功'
-    }
+    ctx.body = successResponse()
   }
 
   async editProfile(ctx) {
+    const { id } = ctx.request.body
+    const updatedUser = await UserModel.findByIdAndUpdate(id, ctx.request.body, { new: true })
+    ctx.body = successResponse(updatedUser)
+  }
+
+  async checkOwner(ctx, next) {
     ctx.verifyParams({
-      _id: { type: 'string', required: true },
+      id: { type: 'string', required: true },
     })
+    if (ctx.request.body.id !== ctx.state.user.id) {
+      ctx.throw(403)
+    }
+    await next()
   }
 }
 module.exports = new User()
