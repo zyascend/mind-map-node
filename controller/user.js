@@ -19,7 +19,7 @@ class User {
     }
     const { _id, _doc } = user
     const token = jsonwebtoken.sign({ id: _id }, tokenSecret, { expiresIn: '1h' })
-    ctx.body = successResponse({ ..._doc, token })
+    ctx.body = successResponse({ user: _doc, token })
   }
 
   async register(ctx) {

@@ -5,9 +5,9 @@ exports.errorResponse = msg => {
   }
 }
 
-exports.successResponse = (res = {}) => {
+exports.successResponse = (data = {}) => {
   return {
     code: 0,
-    res
+    data
   }
 }
