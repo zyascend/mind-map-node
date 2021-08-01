@@ -13,8 +13,8 @@ class User {
     const user = await UserModel.findOne(ctx.request.body)
     console.log(user)
     if (!user) {
-      ctx.body = errorResponse('用户名或密码错误')
-      // ctx.throw(404, '用户名或密码错误')
+      // ctx.body = errorResponse('用户名或密码错误')
+      ctx.throw(404, '用户名或密码错误')
       return
     }
     const { _id, _doc } = user
@@ -48,10 +48,19 @@ class User {
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
-    if (ctx.request.body.id !== ctx.state.user.id) {
+    const id = ctx.request.body.id || ctx.params.id
+    if (id !== ctx.state.user.id) {
       ctx.throw(403)
     }
     await next()
+  }
+
+  async getUser(ctx) {
+    const user = await UserModel.findById(ctx.params.id)
+    if (!user) {
+      ctx.throw(404, '用户不存在')
+    }
+    ctx.body = successResponse(user)
   }
 }
 module.exports = new User()
