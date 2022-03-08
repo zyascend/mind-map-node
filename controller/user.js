@@ -34,8 +34,11 @@ class User {
       ctx.body = errorResponse('该用户已注册')
       return
     }
-    await new UserModel(ctx.request.body).save()
-    ctx.body = successResponse()
+    const user = await new UserModel(ctx.request.body).save()
+    console.log('REG> ', user)
+    const { _id, _doc } = user
+    const token = jsonwebtoken.sign({ id: _id }, tokenSecret, { expiresIn: '1h' })
+    ctx.body = successResponse({ user: _doc, token })
   }
 
   async editProfile(ctx) {
