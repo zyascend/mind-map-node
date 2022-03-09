@@ -35,7 +35,6 @@ class User {
       return
     }
     const user = await new UserModel(ctx.request.body).save()
-    console.log('REG> ', user)
     const { _id, _doc } = user
     const token = jsonwebtoken.sign({ id: _id }, tokenSecret, { expiresIn: '1h' })
     ctx.body = successResponse({ user: _doc, token })
@@ -48,10 +47,12 @@ class User {
   }
 
   async checkOwner(ctx, next) {
+    console.log('checkOwner')
+    console.log(ctx)
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
-    const id = ctx.request.body.id || ctx.params.id
+    const id = ctx.params.id || ctx.request.body.id
     if (id !== ctx.state.user.id) {
       ctx.throw(403)
     }
