@@ -5,7 +5,18 @@ const { Schema, model } = mongoose
 const UserSchema = new Schema({
   email: { type: String, required: true },
   pwd: { type: String, required: true, select: false },
-  name: { type: String, required: false },
-}, { versionKey: false })
+  name: { type: String, required: false }
+}, {
+  versionKey: false,
+  toJSON: {
+    transform: (doc, ret) => {
+      return {
+        ...ret,
+        // eslint-disable-next-line no-underscore-dangle
+        id: ret._id
+      }
+    }
+  },
+})
 
 module.exports = model('User', UserSchema)

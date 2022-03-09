@@ -17,6 +17,8 @@ const FolderSchema = new Schema({
     transform: (doc, ret) => {
       return {
         ...ret,
+        // eslint-disable-next-line no-underscore-dangle
+        id: ret._id,
         createTime: ret.createTime.valueOf(),
         updateTime: ret.updateTime.valueOf()
       }
