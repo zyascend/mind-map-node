@@ -15,5 +15,5 @@ router.post('/setDoc/:id', auth, user.checkOwner, docs.setDoc)
 router.post('/setDocContent/:id/', auth, user.checkOwner, docs.setDocContent)
 router.get('/getAllDocs/:id', auth, user.checkOwner, docs.getAllDocs)
 router.get('/getDocContent/:id/:docId', auth, user.checkOwner, docs.getDocContent)
-
+router.post('/remove/:id', auth, user.checkOwner, docs.remove)
 module.exports = router

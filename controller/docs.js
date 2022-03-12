@@ -62,5 +62,18 @@ class Docs {
     })
     ctx.body = successResponse(newContent)
   }
+
+  async remove(ctx) {
+    const { type, id } = ctx.request.body
+    if (type === 0) {
+      await FolderModel.remove({ _id: id })
+      await DocModel.remove({ folderId: id })
+    } else {
+      console.log(type, id)
+      await DocModel.remove({ _id: id })
+    }
+    const all = await getNewAll(ctx)
+    ctx.body = successResponse(all)
+  }
 }
 module.exports = new Docs()
