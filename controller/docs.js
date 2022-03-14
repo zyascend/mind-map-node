@@ -9,8 +9,6 @@ const updateOption = {
   // setDefaultsOnInsert: false
 }
 async function getNewAll(ctx) {
-  console.log('getNewAll')
-  console.log(ctx)
   const documents = await DocModel.find({ userId: ctx.state.user.id })
   const folders = await FolderModel.find({ userId: ctx.state.user.id })
   return {
@@ -26,16 +24,26 @@ class Docs {
   }
 
   async getDocContent(ctx) {
-    console.log('getDocContent')
-    console.log(ctx)
     const content = await DocContentModel.findOne({ docId: ctx.params.docId })
     ctx.body = successResponse(content)
   }
 
   async setFolder(ctx) {
-    const { id } = ctx.request.body
+    const { id, name } = ctx.request.body
     if (id) {
       await FolderModel.findByIdAndUpdate(id, ctx.request.body, updateOption)
+      const allDocs = await DocModel.find({ folderId: id })
+      const allDocIds = allDocs.map(doc => doc.id)
+      allDocIds.forEach(async v => {
+        await DocContentModel.findOneAndUpdate({ docId: v }, {
+          $set: {
+            directory: [{ name, id }]
+          }
+        }, {
+          ...updateOption,
+          upsert: true
+        })
+      })
     } else {
       await new FolderModel(ctx.request.body).save()
     }
@@ -44,11 +52,28 @@ class Docs {
   }
 
   async setDoc(ctx) {
-    const { id } = ctx.request.body
+    const { id, folderId, name } = ctx.request.body
     if (id) {
       await DocModel.findByIdAndUpdate(id, ctx.request.body, updateOption)
+      await DocContentModel.findOneAndUpdate({ docId: id }, { $set: { name } }, {
+        ...updateOption,
+        upsert: true
+      })
     } else {
-      await new DocModel(ctx.request.body).save()
+      const newDoc = await new DocModel(ctx.request.body).save()
+      let folderName = '我的文件'
+      if (folderId !== '0') {
+        const folder = await FolderModel.findOne({ _id: folderId })
+        folderName = folder.name
+      }
+      await new DocContentModel({
+        docId: newDoc.id,
+        name: newDoc.name,
+        role: 0,
+        definition: newDoc.name,
+        directory: [{ name: folderName, id: folderId }],
+        baseVersion: '0',
+      }).save()
     }
     const all = await getNewAll(ctx)
     ctx.body = successResponse(all)
@@ -66,11 +91,34 @@ class Docs {
   async remove(ctx) {
     const { type, id } = ctx.request.body
     if (type === 0) {
-      await FolderModel.remove({ _id: id })
-      await DocModel.remove({ folderId: id })
+      const { documents, folders } = await getNewAll(ctx)
+      const idQueue = [id]
+      const allList = [...documents, ...folders]
+      const foldersToDelete = [id]
+      const docToDelete = []
+      while (idQueue.length) {
+        const head = idQueue.pop()
+        allList.forEach(v => {
+          if (v.folderId === head) {
+            if ('folderType' in v) {
+              idQueue.push(v.id)
+              foldersToDelete.push(v.id)
+            } else {
+              docToDelete.push(v.id)
+            }
+          }
+        })
+      }
+      foldersToDelete.forEach(async v => {
+        await FolderModel.remove({ _id: v })
+      })
+      docToDelete.forEach(async v => {
+        await DocModel.remove({ _id: v })
+        await DocContentModel.remove({ docId: v })
+      })
     } else {
-      console.log(type, id)
       await DocModel.remove({ _id: id })
+      await DocContentModel.remove({ docId: id })
     }
     const all = await getNewAll(ctx)
     ctx.body = successResponse(all)

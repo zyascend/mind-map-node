@@ -9,6 +9,6 @@ const DocContentSchema = new Schema({
   directory: { type: Array, required: false },
   definition: { type: String, required: true },
   baseVersion: { type: String, required: false },
-}, { versionKey: false, _id: false })
+}, { versionKey: false })
 
 module.exports = model('DocContent', DocContentSchema)
