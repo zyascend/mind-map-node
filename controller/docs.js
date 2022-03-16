@@ -70,7 +70,7 @@ class Docs {
         docId: newDoc.id,
         name: newDoc.name,
         role: 0,
-        definition: newDoc.name,
+        definition: JSON.stringify({ name: newDoc.name, noteList: [] }),
         directory: [{ name: folderName, id: folderId }],
         baseVersion: '0',
       }).save()
