@@ -66,11 +66,20 @@ class Docs {
         const folder = await FolderModel.findOne({ _id: folderId })
         folderName = folder.name
       }
+      const initNode = {
+        name: '',
+        collapsed: false,
+        level: 0,
+        id: 'node-0',
+        pId: 'node-root',
+        _children: [],
+        children: []
+      }
       await new DocContentModel({
         docId: newDoc.id,
         name: newDoc.name,
         role: 0,
-        definition: JSON.stringify({ name: newDoc.name, noteList: [] }),
+        definition: JSON.stringify({ name: newDoc.name, noteList: [initNode] }),
         directory: [{ name: folderName, id: folderId }],
         baseVersion: '0',
       }).save()

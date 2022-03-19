@@ -11,7 +11,7 @@ router.post('/login', user.login)
 
 router.post('/register', user.register)
 
-router.post('/editProfile', auth, user.checkOwner, user.editProfile)
+router.post('/editProfile/:id', auth, user.checkOwner, user.editProfile)
 
 router.get('/getUser/:id', auth, user.checkOwner, user.getUser)
 

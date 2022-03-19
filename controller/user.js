@@ -1,7 +1,11 @@
 const jsonwebtoken = require('jsonwebtoken')
 const UserModel = require('../dbs/schema/user')
-const { tokenSecret } = require('../configs')
-const { errorResponse, successResponse } = require('./utils')
+const { tokenSecret, defaultAvatar } = require('../configs')
+const {
+  errorResponse, successResponse,
+  deleteFiles, getFolderPath
+} = require('./utils')
+const QiniuClient = require('./qiniu')
 
 class User {
   async login(ctx) {
@@ -28,22 +32,31 @@ class User {
       pwd: { type: 'string', required: true }
     })
     // 检查是否已注册
-    const { email } = ctx.request.body
-    const existedUser = await UserModel.findOne({ email })
+    const user = ctx.request.body
+    const existedUser = await UserModel.findOne({ email: user.email })
     if (existedUser) {
       ctx.body = errorResponse('该用户已注册')
       return
     }
-    const user = await new UserModel(ctx.request.body).save()
-    const { _id, _doc } = user
+    user.name = user.email
+    user.avatar = defaultAvatar
+    const newUser = await new UserModel(ctx.request.body).save()
+    const { _id, _doc } = newUser
     const token = jsonwebtoken.sign({ id: _id }, tokenSecret, { expiresIn: '1h' })
     ctx.body = successResponse({ user: _doc, token })
   }
 
   async editProfile(ctx) {
-    const { id } = ctx.request.body
-    const updatedUser = await UserModel.findByIdAndUpdate(id, ctx.request.body, { new: true })
-    ctx.body = successResponse(updatedUser)
+    try {
+      const user = JSON.parse(decodeURIComponent(ctx.request.body.user))
+      const { path, name } = ctx.request.files.file
+      user.avatar = await QiniuClient.uploadFileByPath(path, name, 'pic')
+      const updatedUser = await UserModel.findByIdAndUpdate(user.id, user, { new: true })
+      ctx.body = successResponse(updatedUser)
+      deleteFiles(getFolderPath())
+    } catch (e) {
+      ctx.body = errorResponse(e)
+    }
   }
 
   async checkOwner(ctx, next) {
