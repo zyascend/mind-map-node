@@ -1,5 +1,5 @@
 module.exports = {
-  serverPort: 3000,
+  serverPort: 3003,
   // dbUrl: 'mongodb+srv://root:root@mindmap.3rdjx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   dbUrl: 'mongodb://127.0.0.1:27017/mindmap',
   tokenSecret: 'mindmap-secret-zz',
