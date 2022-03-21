@@ -1,0 +1,25 @@
+apps:
+  - script: app.js
+    name: mindmap
+    env:
+      COMMON_VARIABLE: true
+    env_production:
+      NODE_ENV: production
+deploy:
+  production:
+    user: root
+    host:
+      - 123.57.182.43
+    port: '22'
+    ref: origin/main
+    repo: git@github.com:zyascend/mind-map-node.git
+    path: /www/node/mindmap
+    ssh_options: StrictHostKeyChecking=no
+    pre-deploy: git fetch --all
+    post-deploy: 'npm install && pm2 startOrRestart ecosystem.yaml --env production'
+    env:
+      NODE_ENV: production
+
+  #执行语句
+  #pm2 deploy ecosystem.yaml production setup
+  #pm2 deploy ecosystem.yaml production

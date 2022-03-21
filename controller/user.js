@@ -49,9 +49,13 @@ class User {
   async editProfile(ctx) {
     try {
       const user = JSON.parse(decodeURIComponent(ctx.request.body.user))
-      const { path, name } = ctx.request.files.file
-      user.avatar = await QiniuClient.uploadFileByPath(path, name, 'pic')
-      const updatedUser = await UserModel.findByIdAndUpdate(user.id, user, { new: true })
+      if (ctx.request.files && ctx.request.files.file) {
+        const { path, name } = ctx.request.files.file
+        user.avatar = await QiniuClient.uploadFileByPath(path, name, 'pic')
+        console.log('[user.avatar]>>>>> ', user.avatar)
+      }
+      // eslint-disable-next-line no-underscore-dangle
+      const updatedUser = await UserModel.findByIdAndUpdate(user._id, user, { new: true })
       ctx.body = successResponse(updatedUser)
       deleteFiles(getFolderPath())
     } catch (e) {
