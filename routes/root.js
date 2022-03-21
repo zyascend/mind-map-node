@@ -1,8 +1,8 @@
 const router = require('koa-router')()
 
-router.get('/json', async ctx => {
+router.get('/honghong', async ctx => {
   ctx.body = {
-    title: 'koa2 json'
+    letter: '爱你哟臭宝 by yangyang.'
   }
 })
 
