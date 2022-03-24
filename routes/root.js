@@ -1,8 +1,19 @@
+/**
+ * 测试用
+ * */
 const router = require('koa-router')()
+
+const imgs = '["http://tva1.sinaimg.cn/bmiddle/e16fc503ly8grk49phn4tj20960qngmb.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYly1g6fqnbmhifj30hs0hjwop.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ely8grkkn0tkdlj20kn0jz0vc.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fa6gvebb7mj20a00a00tg.jpg","http://tva1.sinaimg.cn/bmiddle/ae2c6e1dly1gco7s157wij206o06odfw.jpg","http://tva1.sinaimg.cn/bmiddle/007rXfoIly1gh4qvfnfglj30u00u00x2.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYjw1fad2rojuyvj30cm09g74s.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYjw1fb72b4bbhsj30cm09gt9b.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1faoezm7tgxj30cm09g0te.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1f9iz5l6irkj30e304c0tc.jpg","http://tva1.sinaimg.cn/bmiddle/ab4cb34aly1fg4g3jgsysj20b40b4wg0.jpg","http://tva1.sinaimg.cn/bmiddle/ab4cb34aly1fg4g3kfo29j20dw0dwwge.jpg","http://tva1.sinaimg.cn/bmiddle/ab4cb34aly1fg4g3j8kwgj208c08cjsv.jpg","http://tva1.sinaimg.cn/bmiddle/005XSXmNgy1fidoey5x7pj30t00d4ta3.jpg","http://tva1.sinaimg.cn/bmiddle/006cSBLKgy1fxdodep349j308c08ct9h.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ely1g08zx8cpjuj20c80cq752.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYly1g3wfk752aug30dc0d9tam.gif","http://tva1.sinaimg.cn/bmiddle/6db01a2cgy1g4swep9wvjj21970xwgsx.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ely1g5fzh8dkdug209w09wnmw.gif","http://tva1.sinaimg.cn/bmiddle/006fbYi5gy1g60rfe13shj30m80hiwfy.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYly1g9hinyrjhag306o06oaaa.gif","http://tva1.sinaimg.cn/bmiddle/006APoFYly1ged3yz3k2vj308c08c0ue.jpg","http://tva1.sinaimg.cn/bmiddle/974c6be6ly1giex4l4buyg208x08xazn.gif","http://tva1.sinaimg.cn/bmiddle/78b88159gy1gk5yaqk3sij209s0a4jsp.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYly8gp9szsbgcfg305c05pwwx.gif","http://tva1.sinaimg.cn/bmiddle/0068Lfdegy1grh2t7sk0gj30fy0fun0a.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fc0kd0e0zxg303c03c3yl.gif","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fbsfv9hnm0j20c80c8jt5.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fb9j5jvfx2g203d03374e.gif","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fb974q5d3bg205004rgo6.gif","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fb6r1k2qa4g30c806v1kx.gif","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1faodqv3pdmj20cm09gq3r.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYjw1fad3dj0kf1j30cm09g74y.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1faddafbwf4j30cm09gq3w.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fad90fqm9qj30cm09g0ti.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fada0v3zndj20cm09g758.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fae1xyusatj20a00a0js6.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYjw1fa6is2n0nyj30a00a0wf4.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYjw1fa6ix9xdccj30a00a0gm9.jpg","http://tva1.sinaimg.cn/bmiddle/006APoFYjw1fb0d9e80paj30a00a00tc.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fa6krvc086j30a00a0t9c.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fa6kuznx8dj30a00a03z8.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fadwxyvmvsj30a00a03z8.jpg","http://tva1.sinaimg.cn/bmiddle/ceeb653ejw1fa6k83jtyej20a00a0t9c.jpg","http://tva1.sinaimg.cn/bmiddle/006r3PQBjw1fa0tlmiqn4j305i05iaa3.jpg","http://tva1.sinaimg.cn/large/006y8mN6gy1g99l0ydc5sj300g00g04v.jpg","https://fabiaoqing.com/Public/img/logonew.png","http://tva1.sinaimg.cn/large/006y8mN6gy1g99l0ydc5sj300g00g04v.jpg","http://tva1.sinaimg.cn/large/006y8mN6gy1g9boq4e1vmj300k00kq36.jpg"]'
+const jsonImgs = JSON.parse(imgs)
+
+const getRandomUrl = () => {
+  const index = Math.floor(Math.random() * jsonImgs.length)
+  return jsonImgs[index]
+}
 
 router.get('/honghong', async ctx => {
   ctx.type = 'html';
-  ctx.body = '<h1>TO <span style="color: red">💖HONGHONG💖</span>:</h1><img alt="lovehonghong" src="http://tva1.sinaimg.cn/large/ceeb653ely8gzygkr90qtj20hs0hsjt2.jpg" /><h3>by yangyang.</h3>'
+  ctx.body = `<h1>TO <span style="color: red">💖HONGHONG💖</span>:</h1><img alt="lovehonghong" src=${getRandomUrl()} /><h3>by yangyang.</h3>`
 })
 
 module.exports = router
