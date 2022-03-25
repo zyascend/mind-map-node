@@ -40,87 +40,81 @@ class QiniuClient {
     })
   }
 
-  fetchPhotos(cate) {
-    const options = {
-      // limit: 10, TODO 分页获取的实现
-      prefix: `image/${cate || ''}`,
-    };
-    return new Promise((resolve, reject) => {
-      this.getBucketManager().listPrefix(qiniuConf.bucket, options, (err, respBody, respInfo) => {
-        if (err) {
-          reject(err)
-        }
-        console.log(respInfo);
-        console.log(respBody);
-        if (respInfo.statusCode === 200) {
-          const { items } = respBody
-          const resList = []
-          items.forEach(item => {
-            resList.push({
-              imgUrl: `${qiniuConf.domain}${item.key}`,
-              createDate: item.putTime,
-              cate,
-              hash: item.hash,
-              mimeType: item.mimeType,
-            })
-          });
-          resolve(resList)
-        } else {
-          reject(respInfo.statusCode)
-        }
-      });
-    })
-  }
+  // fetchPhotos(cate) {
+  //   const options = {
+  //     // limit: 10, TODO 分页获取的实现
+  //     prefix: `image/${cate || ''}`,
+  //   };
+  //   return new Promise((resolve, reject) => {
+  //     this.getBucketManager().listPrefix(qiniuConf.bucket, options, (err, respBody, respInfo) => {
+  //       if (err) {
+  //         reject(err)
+  //       }
+  //       if (respInfo.statusCode === 200) {
+  //         const { items } = respBody
+  //         const resList = []
+  //         items.forEach(item => {
+  //           resList.push({
+  //             imgUrl: `${qiniuConf.domain}${item.key}`,
+  //             createDate: item.putTime,
+  //             cate,
+  //             hash: item.hash,
+  //             mimeType: item.mimeType,
+  //           })
+  //         });
+  //         resolve(resList)
+  //       } else {
+  //         reject(respInfo.statusCode)
+  //       }
+  //     });
+  //   })
+  // }
 
-  addPhotosByUrl(imgUrl, cate) {
-    if (!imgUrl || imgUrl.indexOf('/') < 0) return null
-
-    const splitedUrlArray = imgUrl.split('/')
-    const key = `image/${cate}/${new Date().getTime()}_${splitedUrlArray[splitedUrlArray.length - 1]}`
-
-    console.log('key')
-    console.log(key)
-
-    return new Promise((resolve, reject) => {
-      this.getBucketManager().fetch(imgUrl, qiniuConf.bucket, key, (err, respBody, respInfo) => {
-        if (err) {
-          reject(err)
-        } else if (respInfo.statusCode === 200) {
-          const resData = {
-            imgUrl: `${qiniuConf.domain}${respBody.key}`,
-            fsize: respBody.fsize,
-            cate,
-          }
-          console.log(resData)
-          resolve(resData)
-        } else {
-          reject(respInfo.statusCode);
-        }
-      });
-    })
-  }
-
-  deletePhotosByUrl(url) {
-    if (url.indexOf(qiniuConf.domain) < 0) {
-      return 'key is incorrect'
-    }
-    const key = url.replace(qiniuConf.domain, '')
-
-    console.log('key to delete')
-    console.log(key)
-
-    return new Promise((resolve, reject) => {
-      this.getBucketManager().delete(bucket, key, (err, respBody, respInfo) => {
-        if (err) {
-          reject(err)
-        } else if (respInfo.statusCode === 200) {
-          resolve(0)
-        } else {
-          reject(respInfo.statusCode);
-        }
-      });
-    })
-  }
+  // addPhotosByUrl(imgUrl, cate) {
+  //   if (!imgUrl || imgUrl.indexOf('/') < 0) return null
+  //
+  //   const splitedUrlArray = imgUrl.split('/')
+  //   const key = `image/${cate}/${new Date().getTime()}_${splitedUrlArray[splitedUrlArray.length - 1]}`
+  //
+  //   return new Promise((resolve, reject) => {
+  //     this.getBucketManager().fetch(imgUrl, qiniuConf.bucket, key, (err, respBody, respInfo) => {
+  //       if (err) {
+  //         reject(err)
+  //       } else if (respInfo.statusCode === 200) {
+  //         const resData = {
+  //           imgUrl: `${qiniuConf.domain}${respBody.key}`,
+  //           fsize: respBody.fsize,
+  //           cate,
+  //         }
+  //         resolve(resData)
+  //       } else {
+  //         reject(respInfo.statusCode);
+  //       }
+  //     });
+  //   })
+  // }
+  //
+  // deletePhotosByUrl(url) {
+  //   if (url.indexOf(qiniuConf.domain) < 0) {
+  //     return 'key is incorrect'
+  //   }
+  //   const key = url.replace(qiniuConf.domain, '')
+  //
+  //   console.log('key to delete')
+  //   console.log(key)
+  //
+  //   return new Promise((resolve, reject) => {
+  //     this.getBucketManager().delete(bucket, key, (err, respBody, respInfo) => {
+  //       if (err) {
+  //         reject(err)
+  //       } else if (respInfo.statusCode === 200) {
+  //         resolve(0)
+  //       } else {
+  //         reject(respInfo.statusCode);
+  //       }
+  //     });
+  //   })
+  // }
 }
 
 module.exports = new QiniuClient()

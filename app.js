@@ -9,7 +9,6 @@ const parameter = require('koa-parameter')
 const path = require('path')
 const cors = require('koa2-cors')
 
-
 const config = require('./configs')
 const connectDb = require('./dbs/init')
 
@@ -24,7 +23,7 @@ onerror(app)
 // app.use(bodyparser({
 //   enableTypes: ['json', 'form', 'text'],
 // }))
-app.use(cors())
+app.use(cors({ origin: '*.kimjisoo.cn' }))
 app.use(koaBody({
   multipart: true,
   strict: false,

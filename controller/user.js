@@ -15,7 +15,6 @@ class User {
       pwd: { type: 'string', required: true }
     })
     const user = await UserModel.findOne(ctx.request.body)
-    console.log(user)
     if (!user) {
       // ctx.body = errorResponse('用户名或密码错误')
       ctx.throw(404, '用户名或密码错误')
@@ -52,7 +51,6 @@ class User {
       if (ctx.request.files && ctx.request.files.file) {
         const { path, name } = ctx.request.files.file
         user.avatar = await QiniuClient.uploadFileByPath(path, name, 'pic')
-        console.log('[user.avatar]>>>>> ', user.avatar)
       }
       // eslint-disable-next-line no-underscore-dangle
       const updatedUser = await UserModel.findByIdAndUpdate(user._id, user, { new: true })
@@ -64,8 +62,6 @@ class User {
   }
 
   async checkOwner(ctx, next) {
-    console.log('checkOwner')
-    console.log(ctx)
     ctx.verifyParams({
       id: { type: 'string', required: true },
     })
