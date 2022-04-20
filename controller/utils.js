@@ -38,3 +38,25 @@ exports.request = async (options) => {
 exports.getFolderPath = () => {
   return path.join(__dirname, '../public/upload/')
 }
+
+exports.getDefaultDefinition = () => {
+  const content = {
+    'map-root': {
+      id: 'map-root',
+      html: '新文档',
+      children: ['n-0'],
+      _children: [],
+      parent: '-1',
+      collapsed: false
+    },
+    'n-0': {
+      id: 'n-0',
+      html: '子节点',
+      children: [],
+      _children: [],
+      parent: 'map-root',
+      collapsed: false
+    }
+  }
+  return JSON.stringify(content)
+}
