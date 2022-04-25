@@ -19,8 +19,16 @@ async function getNewAll(ctx) {
 
 class Docs {
   async getAllDocs(ctx) {
-    const all = await getNewAll(ctx)
-    ctx.body = successResponse(all)
+    const { latest } = ctx.request.query
+    if (latest) {
+      // 如果带latest参数 返回最近编辑的文档
+      const documents = await DocModel.find({ userId: ctx.state.user.id })
+        .limit(Number(latest)).sort({ updateTime: -1 })
+      ctx.body = successResponse(documents)
+    } else {
+      const all = await getNewAll(ctx)
+      ctx.body = successResponse(all)
+    }
   }
 
   async getDocContent(ctx) {

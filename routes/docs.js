@@ -8,8 +8,6 @@ const auth = jwt({ secret: tokenSecret })
 
 router.prefix('/docs')
 
-// router.post('/register', user.register)
-
 router.post('/setFolder/:id', auth, user.checkOwner, docs.setFolder)
 router.post('/setDoc/:id', auth, user.checkOwner, docs.setDoc)
 router.post('/setDocContent/:id/', auth, user.checkOwner, docs.setDocContent)
