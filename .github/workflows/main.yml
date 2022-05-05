@@ -33,7 +33,7 @@ jobs:
           script: |
             cd /www/node
             rm -rf mind-map-node
-            git clone --depth git@github.com:zyascend/mind-map-node.git
+            git clone --depth=1 git@github.com:zyascend/mind-map-node.git
             cd /mind-map-node
             npm install && pm2 startOrRestart ecosystem.yaml --env production
             
