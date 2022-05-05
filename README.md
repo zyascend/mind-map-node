@@ -1,6 +1,8 @@
-### 思维导图Node后端
+前端项目：[ZMind思维导图](https://github.com/zyascend/ZMindMap) 的Node后端
 
-### 相关技术
+### Features
 - Koa
 - Qiniu
 - Mongodb
+- redis
+- JWT
