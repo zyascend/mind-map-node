@@ -1,7 +1,8 @@
 const DocModel = require('../dbs/schema/doc')
 const DocContentModel = require('../dbs/schema/doc_content')
 const FolderModel = require('../dbs/schema/folder')
-const { successResponse, getDefaultDefinition } = require('./utils')
+const { successResponse, getDefaultDefinition, errorResponse } = require('./utils')
+const QiniuClient = require('./qiniu')
 
 const updateOption = {
   // upsert: true,
@@ -94,6 +95,18 @@ class Docs {
       upsert: true
     })
     ctx.body = successResponse(newContent)
+  }
+
+  async uploadImg(ctx) {
+    try {
+      if (ctx.request.files && ctx.request.files.file) {
+        const { path, name } = ctx.request.files.file
+        const url = await QiniuClient.uploadFileByPath(path, name, 'pic')
+        ctx.body = successResponse(url)
+      }
+    } catch (e) {
+      ctx.body = errorResponse(e)
+    }
   }
 
   async remove(ctx) {

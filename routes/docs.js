@@ -14,4 +14,5 @@ router.post('/setDocContent/:id/', auth, user.checkOwner, docs.setDocContent)
 router.get('/getAllDocs/:id', auth, user.checkOwner, docs.getAllDocs)
 router.get('/getDocContent/:id/:docId', auth, user.checkOwner, docs.getDocContent)
 router.post('/remove/:id', auth, user.checkOwner, docs.remove)
+router.post('/uploadImg/:id', auth, user.checkOwner, docs.uploadImg)
 module.exports = router
