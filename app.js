@@ -23,7 +23,14 @@ onerror(app)
 // app.use(bodyparser({
 //   enableTypes: ['json', 'form', 'text'],
 // }))
-app.use(cors())
+app.use(cors({
+  origin: () => {
+    if (process.env.npm_lifecycle_event === 'dev') {
+      return '*'
+    }
+    return '*.kimjisoo.cn'
+  }
+}))
 app.use(koaBody({
   multipart: true,
   strict: false,
