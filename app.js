@@ -28,7 +28,7 @@ app.use(cors({
     if (process.env.npm_lifecycle_event === 'dev') {
       return '*'
     }
-    return '*.kimjisoo.cn'
+    return 'https://map.kimjisoo.cn'
   }
 }))
 app.use(koaBody({
