@@ -75,10 +75,15 @@ class Docs {
         const folder = await FolderModel.findOne({ _id: folderId })
         folderName = folder.name
       }
+      console.log('[setDoc]')
       await new DocContentModel({
         docId: newDoc.id,
         name: newDoc.name,
         role: 0,
+        styles: {
+          mapStyleId: 'MAPID-LogicTree',
+          colorId: 'COLOR-Energy-2'
+        },
         definition: getDefaultDefinition(),
         directory: [{ name: folderName, id: folderId }],
         baseVersion: '0',

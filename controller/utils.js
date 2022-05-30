@@ -47,7 +47,8 @@ exports.getDefaultDefinition = () => {
       children: ['n-0'],
       _children: [],
       parent: '-1',
-      collapsed: false
+      collapsed: false,
+      markerList: ['https://cdn.kimjisoo.cn/pic/svgicons/tag-red.svg']
     },
     'n-0': {
       id: 'n-0',
@@ -55,7 +56,8 @@ exports.getDefaultDefinition = () => {
       children: [],
       _children: [],
       parent: 'map-root',
-      collapsed: false
+      collapsed: false,
+      markerList: ['https://cdn.kimjisoo.cn/pic/svgicons/task-oct.svg', 'https://cdn.kimjisoo.cn/pic/svgicons/flag-green.svg', 'https://cdn.kimjisoo.cn/pic/svgicons/symbol-idea.svg']
     }
   }
   return JSON.stringify(content)

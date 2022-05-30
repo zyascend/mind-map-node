@@ -2,10 +2,11 @@
  * 测试用
  * */
 const router = require('koa-router')()
+const styles = require('../configs/mapStyle')
+const { successResponse } = require('../controller/utils')
 
-router.get('/t', async ctx => {
-  ctx.type = 'html';
-  ctx.body = '<h1>SUCCESS!</h1>'
+router.get('/styles', async ctx => {
+  ctx.body = successResponse(styles)
 })
 
 module.exports = router
