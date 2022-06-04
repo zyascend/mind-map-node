@@ -1,6 +1,10 @@
 const jsonwebtoken = require('jsonwebtoken')
+const DocModel = require('../dbs/schema/doc')
+const DocContentModel = require('../dbs/schema/doc_content')
 const UserModel = require('../dbs/schema/user')
 const { tokenSecret, defaultAvatar } = require('../configs')
+const template = require('../configs/template.json')
+
 const {
   errorResponse, successResponse,
   deleteFiles, getFolderPath
@@ -43,6 +47,7 @@ class User {
     const { _id, _doc } = newUser
     const token = jsonwebtoken.sign({ id: _id }, tokenSecret, { expiresIn: '1h' })
     ctx.body = successResponse({ user: _doc, token })
+    await setDefaultDoc(_id)
   }
 
   async editProfile(ctx) {
@@ -79,5 +84,14 @@ class User {
     }
     ctx.body = successResponse(user)
   }
+}
+async function setDefaultDoc(userId) {
+  const newDoc = await new DocModel({
+    name: '操作指南',
+    folderId: '0',
+    userId
+  }).save()
+  const { data } = template
+  await new DocContentModel({ ...data, docId: newDoc.id }).save()
 }
 module.exports = new User()

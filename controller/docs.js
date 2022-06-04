@@ -75,7 +75,6 @@ class Docs {
         const folder = await FolderModel.findOne({ _id: folderId })
         folderName = folder.name
       }
-      console.log('[setDoc]')
       await new DocContentModel({
         docId: newDoc.id,
         name: newDoc.name,
