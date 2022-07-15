@@ -20,7 +20,7 @@ var port = normalizePort(process.env.PORT || '3000');
  */
 
 var server = http.createServer(app.callback());
-
+require('../controller/socket')()
 /**
  * Listen on provided port, on all network interfaces.
  */

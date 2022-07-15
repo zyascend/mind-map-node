@@ -2,10 +2,11 @@
  * 二维码登录相关
  */
 const jsonwebtoken = require('jsonwebtoken')
-const { tokenSecret } = require('../configs')
 const { customAlphabet } = require('nanoid')
+const { tokenSecret } = require('../configs')
 const { successResponse, errorResponse } = require('./utils')
 const redis = require('./redis')
+const broadcast = require('./broadcast')
 
 const nanoid = customAlphabet('1234567890abcdef', 7)
 
@@ -28,6 +29,7 @@ class Docs {
         }
       }
       await redis.set(qid, JSON.stringify({ status, data: userData }))
+      broadcast.setCodeStatus().postMessage(qid)
       ctx.body = successResponse({ status, qid })
     } else {
       ctx.body = errorResponse('status or qid cannot be null')
@@ -37,7 +39,6 @@ class Docs {
   async getStatus(ctx) {
     const { qid } = ctx.request.query
     const [result, err] = await redis.get(qid)
-    console.log(result, err)
     if (!result || err) {
       ctx.body = successResponse({ status: 'EXPIRED', data: {}, qid })
     } else {

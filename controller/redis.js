@@ -33,10 +33,9 @@ class Redis {
     //   ['set', 'notify-keyspace-events', 'Ex'], this.SubscribeExpired)
   }
 
-  set(key, value, expire = 120) {
+  set(key, value, expire = 100) {
     return new Promise((resolve, reject) => {
       this.client.set(key, value, (err, result) => {
-        console.log(key, value, err, result)
         if (err) {
           reject(err)
         }
