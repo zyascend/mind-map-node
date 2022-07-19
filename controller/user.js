@@ -71,7 +71,13 @@ class User {
       id: { type: 'string', required: true },
     })
     const id = ctx.params.id || ctx.request.body.id
-    if (id !== ctx.state.user.id) {
+    const { id: tokenId, exp } = ctx.state.user
+    if (Date.parse(new Date()) / 1000 > exp - 5 * 60) {
+      // token过期了
+      ctx.throw(401)
+    }
+    if (id !== tokenId) {
+      // token id 和 请求id 不一致
       ctx.throw(403)
     }
     await next()
