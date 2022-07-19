@@ -11,7 +11,7 @@ const broadcast = require('./broadcast')
 const generateId = customAlphabet('1234567890abcdef', 7)
 
 io.on('connection', socket => {
-  // console.log('io connected!')
+  console.log('io connected!')
 
   socket.on('genCode', async () => {
     // console.log('genCode!')

@@ -13,7 +13,7 @@ const config = require('./configs')
 const connectDb = require('./dbs/init')
 
 connectDb(config.dbUrl)
-
+require('./controller/socket')()
 const routes = require('./routes')
 
 // error handler
