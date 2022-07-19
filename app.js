@@ -1,6 +1,5 @@
 const Koa = require('koa')
-
-const app = new Koa()
+const http = require('http')
 const json = require('koa-json')
 const onerror = require('koa-onerror')
 const koaBody = require('koa-body')
@@ -9,20 +8,18 @@ const parameter = require('koa-parameter')
 const path = require('path')
 const cors = require('koa2-cors')
 
+const initSocket = require('./controller/socket')
 const config = require('./configs')
 const connectDb = require('./dbs/init')
 
 connectDb(config.dbUrl)
-require('./controller/socket')()
 const routes = require('./routes')
+const app = new Koa()
 
 // error handler
 onerror(app)
 
 // middlewares
-// app.use(bodyparser({
-//   enableTypes: ['json', 'form', 'text'],
-// }))
 app.use(cors({
   origin: () => {
     if (process.env.npm_lifecycle_event === 'dev') {
@@ -58,10 +55,8 @@ app.use(async (ctx, next) => {
 })
 
 routes(app)
+const server = http.createServer(app.callback())
+initSocket(server)
 
-// error-handling
-app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx)
-})
-app.listen(config.serverPort)
+server.listen(config.serverPort)
 module.exports = app
