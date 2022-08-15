@@ -18,10 +18,17 @@ class User {
       email: { type: 'string', required: true },
       pwd: { type: 'string', required: true }
     })
-    const user = await UserModel.findOne(ctx.request.body)
+    const { email } = ctx.request.body
+    const user = await UserModel.findOne({ email })
     if (!user) {
       // ctx.body = errorResponse('用户名或密码错误')
-      ctx.throw(404, '用户名或密码错误')
+      ctx.throw(404, '请先注册')
+      return
+    }
+    // TODO 改为一次查询 但是需要设置user schema 的pwd select=true
+    const userWithPwd = await UserModel.findOne(ctx.request.body)
+    if (!userWithPwd) {
+      ctx.throw(404, '密码错误')
       return
     }
     const { _id, _doc } = user

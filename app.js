@@ -14,6 +14,7 @@ const connectDb = require('./dbs/init')
 
 connectDb(config.dbUrl)
 const routes = require('./routes')
+
 const app = new Koa()
 
 // error handler
